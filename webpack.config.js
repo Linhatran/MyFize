@@ -1,5 +1,4 @@
 const path = require('path');
-
 module.exports = {
   entry: './client/index.js',
   output: {
@@ -21,7 +20,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: ['@babel/preset-react', '@babel/env', '@babel/react'],
+          presets: ['@babel/preset-react', '@babel/env'],
           plugins: [
             '@babel/plugin-syntax-jsx',
             '@babel/plugin-transform-runtime',

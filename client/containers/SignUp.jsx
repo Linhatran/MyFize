@@ -12,10 +12,9 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Redirect } from 'react-router';
 import { Link, BrowserRouter as Router, Switch, Route, useHistory, useLocation } from 'react-router-dom';
-import PlaidButton from '../components/PlaidButton.jsx'
 
+// renders copyright line at bottom of page
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -60,12 +59,12 @@ export default function SignIn() {
 
   const history = useHistory(); 
   
-  // sends username/password to database to confirm login info
+  // HERE: write function to check login info - use bcrypt compare route
   const clickHandler = (e) => {
-    console.log(username, password);
+    // console.log(username, password);
     e.preventDefault(); 
-    console.log('enters click handler')
-    fetch('/bcrypt/check_pw', {
+    // console.log('enters click handler')
+    fetch('/bcrypt/create_pw', {
       method: 'POST',
       body: JSON.stringify({
         username: username,
@@ -74,19 +73,22 @@ export default function SignIn() {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(data => data.json()).then(result => {
-      if (result){ // if username and password are a match, redirect to landing page
-        setLogin(true); 
-        history.push('landing')
-      } else { // otherwise, notify that password is incorrect
-        alert('Invalid username or password')
-      }
+    }).then(data => data.json())
+      .then(result => { // might modify if we change backend to check for duplicate users
+        if (result) { // once account has been created, redirect to landing page
+          setLogin(true);
+          sessionStorage.setItem('currentUser', username) // stores created username in session storage if successful
+          history.push('landing')
+        } else {
+          alert('Error occurred.')
+        }
     })
+    .catch((err) => console.log(err));
   }
 
-  // redirects to sign-up page to allow user to create account
-  const toSignUpPage = () => {
-    history.push('signup')
+  const toSignInPage = () => {
+    // const history = useHistory();
+    history.push('/')
   }
 
   const routeChange = () => {
@@ -102,12 +104,12 @@ export default function SignIn() {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar} >
-        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" className="bi bi-wallet2" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
         <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
         </svg>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign up
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -134,10 +136,6 @@ export default function SignIn() {
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
             <Button
               type="submit"
               fullWidth
@@ -146,7 +144,7 @@ export default function SignIn() {
               className={classes.submit}
               onClick={clickHandler}
             >
-              Sign In
+              Sign Up
             </Button>
           <Grid container>
             <Grid item xs>
@@ -155,8 +153,8 @@ export default function SignIn() {
               </LinkUI> */}
             </Grid>
             <Grid item>
-              <LinkUI href='#' onClick={() => toSignUpPage()} variant="body2">
-                {"Don't have an account? Sign Up"}
+              <LinkUI href="#" onClick={() => toSignInPage()} variant="body2">
+                {"Back to login page"}
               </LinkUI>
             </Grid>
           </Grid>
