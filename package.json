@@ -32,11 +32,8 @@
     "@material-ui/data-grid": "^4.0.0-alpha.13",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material/animation": "^8.0.0",
-<<<<<<< HEAD
-=======
     "babel-jest": "^26.6.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
->>>>>>> 0670bef447a5f3cce948c53b51bcb7fee6726a5a
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "enzyme": "^3.11.0",
