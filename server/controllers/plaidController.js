@@ -40,14 +40,9 @@ plaidController.getLinkToken = (request, response, next) => {
 };
 
 plaidController.getAccessToken = (request, response, next) => {
-<<<<<<< HEAD
-  PUBLIC_TOKEN = request.body.public_token;
-  console.log(PUBLIC_TOKEN, 'pub toke');
-=======
   console.log('pub toke');
   PUBLIC_TOKEN = request.body.public_token;
 
->>>>>>> e5d815fa8e1b151c809026107617aafe6d9a4464
   client.exchangePublicToken(PUBLIC_TOKEN, function (error, tokenResponse) {
     if (error != null) {
       const msg = 'Could not exchange public_token!';
