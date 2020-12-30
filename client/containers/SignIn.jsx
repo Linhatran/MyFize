@@ -16,6 +16,7 @@ import { Redirect } from 'react-router';
 import { Link, BrowserRouter as Router, Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import PlaidButton from '../components/PlaidButton.jsx'
 
+// renders copyright line at bottom of page
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
