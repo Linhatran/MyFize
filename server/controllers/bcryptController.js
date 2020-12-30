@@ -1,5 +1,7 @@
 const { Client } = require('pg');
-const database = new Client('');
+const database = new Client({
+  connectionString: process.env.POSTGRES_API,
+});
 database.connect();
 
 const bcrypt = require('bcrypt');
