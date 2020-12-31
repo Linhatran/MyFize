@@ -4,10 +4,10 @@ const bcryptController = require('../controllers/bcryptController.js');
 
 
 router.post('/create_pw', bcryptController.createPassword, bcryptController.storeUserCredentials, (req, res) => {
-  return res.status(200).json(res.locals.result);
+  return res.status(200).send();
 });
 
-router.post('/check_pw', bcryptController.checkPassword,  (req, res) => {
+router.post('/check_pw', bcryptController.checkPassword, (req, res) => {
   return res.status(200).send(res.locals.result);
 });
 
