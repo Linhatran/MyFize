@@ -51,7 +51,29 @@ export default function Transactions() {
     };
   };
 
-  let hasFetched = false;
+  const [barData, setBarData] = useState(genData());
+
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
+
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    if (Object.keys(dbData).length === 0) {
+      setCounter(counter + 1);
+    } else {
+      setCounter(10);
+    }
+  }, [dbData]);
 
   useEffect(() => {
     fetch('/test/get_transactions')
@@ -60,7 +82,6 @@ export default function Transactions() {
         //gather data for the grid display
         setTransactions(
           res.transactions.map((ele) => {
-            hasFetched = true;
             return {
               id: ele.row_id,
               account_id: ele.account_id,
@@ -83,19 +104,20 @@ export default function Transactions() {
           return acc;
         }, {});
         setTimeout(() => {
+          console.log('in setTimeout');
           setDbData(data);
-        }, 1000);
+        }, 2000);
       })
       .then(() => {
         setBarData(genData());
-        console.log('in then', barData);
-      });
-  }, [dbData]);
-  const [barData, setBarData] = useState(genData());
+        console.log('barData');
+      })
+      .catch((err) => console.log(err));
+  }, [counter]);
 
   return (
     <div className='transactions'>
-      <Bar data={barData} />
+      <Bar data={barData} options={options} />
       <h3>Transactions</h3>
       <div className='table' style={{ height: 800, width: '90%' }}>
         <DataGrid rows={transactions} columns={columns} pageSize={25} />
