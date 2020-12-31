@@ -1,15 +1,20 @@
 const express = require('express');
 const dbController = require('../controllers/dbController.js');
+const bcryptController = require('../controllers/bcryptController');
 const router = express.Router();
 
 // gets all transactions from the database for a specific user - also invoked when we /get_transactions in the plaid.js file
-router.get('/userinfo/', dbController.getBankTransactions,  (req, res) =>  {
-  
+router.get('/userinfo/', dbController.getBankTransactions, (req, res) => {
+
   return res.status(200).json(res.locals.data);
 })
 
+router.post('/login', bcryptController.checkPassword, dbController.getBankAccounts, dbController.getBankTransactions, (req, res) => {
+  console.log(res.locals.result);
+});
+
 //deprecated route. used during development to test database querying / inserting rows. 
-router.post('/userinfo', dbController.addBankInfo, (req,res) => {
+router.post('/userinfo', dbController.addBankInfo, (req, res) => {
   return res.status(200).json('success');
 })
 

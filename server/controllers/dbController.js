@@ -1,27 +1,38 @@
-const database = require('../models/dbModels');
+const database = require('../models/userModel');
 const dbController = {};
 
 //Selects all rows from the transactions table.
 dbController.getBankTransactions = (request, response, next) => {
-  const queryText = 'SELECT * FROM user_transactions';
-  database.query(queryText, (err, res) => {
+  let values = [];
+  let valueString = '';
+  for (let i = 0; i < response.locals.result.accounts.length; i++) {
+    if (i === response.locals.result.accounts.length - 1) {
+      valueString += `$${i + 1}`;
+      values.push(response.locals.result.accounts[i]._id);
+      continue;
+    }
+    values.push(response.locals.result.accounts[i]._id);
+    valueString += `$${i + 1}, `;
+  }
+  const queryText = `SELECT * FROM User_Transactions WHERE account_id IN (${valueString})`;
+  database.query(queryText, values, (err, res) => {
     if (err) {
       return next(err);
     } else {
-      response.locals.transactions = res.rows;
+      response.locals.result.transactions = res.rows;
       return next();
     }
   });
 };
 
 dbController.getBankAccounts = (request, response, next) => {
-  const queryText = 'SELECT * FROM user_accounts;';
-  database.query(queryText, (err, res) => {
+  const values = [response.locals.result.id];
+  const query = 'SELECT * FROM User_Accounts WHERE user_id = $1';
+  database.query(query, values, (err, res) => {
     if (err) {
       return next(err);
     } else {
-      console.log(res.rows);
-      response.locals.accounts = res.rows;
+      response.locals.result.accounts = res.rows;
       return next();
     }
   });

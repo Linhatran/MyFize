@@ -1,9 +1,5 @@
-// const { Client } = require('pg');
-// const database = new Client({
-//   connectionString: process.env.POSTGRES_API,
-// });
-// database.connect();
-const database = require('../models/dbModels');
+const database = require('../models/userModel');
+
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -16,41 +12,45 @@ bcryptController.createPassword = (request, response, next) => {
     if (err) { 
       return next(err);
     }
-    request.body = { hash, username,}
+    response.locals.credentials = { username: username, hash: hash }
     return next();
   });
 };
 
-//checks password input against the database and returns a boolean 
-bcryptController.checkPassword = (request, response, next) => {
   // console.log('getting username')
-  const { password, username } = request.body;  
   const text = `SELECT * FROM bc_storage WHERE username='${username}'`;
   let data;
     database.query(text, (err, res) => {
+=======
+//checks password input against the database and returns a boolean
+bcryptController.checkPassword = (req, res, next) => {
+  const { username, password } = req.body;
+  const values = [username];
+  const query = 'SELECT * FROM Users WHERE username = $1';
+  database.query(query, values, (err, response) => {
+
     if (err) {
       return next(err)
     } else {
-      data = res;
-      console.log('comparing passwords')
-      bcrypt.compare(password, data.rows[0].hash, function(err, res) {
-        if (err) return next(err);
-        response.locals.result = res;
+      let user = response.rows[0]
+      bcrypt.compare(password, user.hash, function (err, check) {
+        if (!check) return next("Incorrect password!");
+        res.locals.result = { id: user._id, username: user.username }
         return next();
       });
     };
   });
 };
 
-//Stores encrypted password with username in db. 
-bcryptController.storeUserCredentials = (request, response, next) => {
-  const { username, hash } = request.body;
-  const text = `INSERT INTO bc_storage (username, hash) VALUES ('${username}', '${hash}');`;
-  database.query(text, (err, res) => {
+//Stores encrypted password with username in db.
+bcryptController.storeUserCredentials = (req, res, next) => {
+  const { username, hash } = res.locals.credentials;
+  const values = [username, hash]
+  const query = 'INSERT INTO Users(username, hash) VALUES($1, $2)';
+  database.query(query, values, (err, res) => {
     if (err) {
       return next(err)
     } else {
-      console.log('completed query');
       return next();
     };
   });

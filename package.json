@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "dev": "NODE_ENV=development concurrently \" webpack-dev-server\" \"nodemon server/server.js\"",
-    "build": "NODE_ENV=production webpack"
+    "dev": "cross-env NODE_ENV=development concurrently \" webpack-dev-server\" \"nodemon server/server.js\"",
+    "build": "NODE_ENV=production webpack",
+    "test": "jest --verbose"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "react-router-dom": "^5.2.0",
     "react-scroll-to-bottom": "^4.0.0",
     "react-test-renderer": "^17.0.1",
+    "regenerator-runtime": "^0.13.7",
     "supertest": "^6.0.1"
   },
   "devDependencies": {
