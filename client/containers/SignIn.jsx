@@ -157,7 +157,7 @@ export default function SignIn() {
             </Grid>
             <Grid item>
               <LinkUI href='#' onClick={() => toSignUpPage()} variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"Don't have an account?"} {<strong>Sign Up</strong>}
               </LinkUI>
             </Grid>
           </Grid>
