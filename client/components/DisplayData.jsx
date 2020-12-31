@@ -1,28 +1,13 @@
-import React, { useState, useEffect } from 'react'; 
-// import Paper from '@material-ui/core/Paper';
-// import {
-//   Chart,
-//   BarSeries,
-//   Title,
-//   ArgumentAxis,
-//   ValueAxis,
-// } from '@devexpress/dx-react-chart-material-ui';     ---> stretch 
+import React, { useState, useEffect } from 'react';
+import { Bar } from 'react-chartjs-2';
 
-// import { Animation } from '@devexpress/dx-react-chart';
-
-const DisplayData = () => {
+const DisplayData = (props) => {
   return (
-    <div className = "displayData">
+    <div className='displayData'>
       <h3>DisplayData</h3>
+      <Bar data={props.barData} options={props.options} id='graph' />
     </div>
-  )
+  );
 };
 
-
-
-
-
 export default DisplayData;
-
-
-

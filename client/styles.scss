@@ -69,12 +69,13 @@ body {
   background-color: #ffffff;
   text-align: center;
   width: 85%;
-  height: 30%;
   margin-bottom: 5px;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
-
+.accInfo {
+  height: 13vh;
+}
 .accInfo h3 {
   margin: 0;
 }
@@ -83,7 +84,11 @@ body {
 }
 
 .displayData {
-  height: 20%;
+  height: 45vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .transactions {
@@ -122,3 +127,7 @@ body {
 }
 
 /////charts///
+#graph {
+  height: 90%;
+  width: 90%;
+}

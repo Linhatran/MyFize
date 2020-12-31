@@ -44,7 +44,53 @@ function Landing() {
   function handleChange(newValue) {
     setValue(newValue);
   }
+  const [dbData, setDbData] = useState({});
+  const genData = () => {
+    console.log('dbData', dbData);
+    const categories =
+      Object.keys(dbData).length === 0 ? null : Object.keys(dbData);
+    const values =
+      Object.keys(dbData).length === 0 ? null : Object.values(dbData);
+    return {
+      labels: categories,
+      datasets: [
+        {
+          label: 'Scale',
+          data: values,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
 
+  const [barData, setBarData] = useState(genData());
+  const options = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+  };
   return (
     <div className='landing'>
       <div className='leftSide'>
@@ -52,8 +98,15 @@ function Landing() {
       </div>
       <div className='rightSide'>
         <AccountInfo accounts={accounts} />
-        <DisplayData />
-        <Transactions />
+        <DisplayData 
+          barData={barData} 
+          options={options}/>
+        <Transactions
+          setBarData={setBarData}
+          dbData={dbData}
+          setDbData={setDbData}
+          genData={genData}
+        />
       </div>
     </div>
   );
