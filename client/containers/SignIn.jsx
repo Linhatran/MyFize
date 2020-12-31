@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Redirect } from 'react-router';
 import {
   Link,
   BrowserRouter as Router,
@@ -22,6 +23,7 @@ import {
 } from 'react-router-dom';
 import PlaidButton from '../components/PlaidButton.jsx';
 
+// renders copyright line at bottom of page
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
@@ -66,6 +68,7 @@ export default function SignIn() {
 
   const history = useHistory();
 
+  // sends username/password to database to confirm login info
   const clickHandler = (e) => {
     console.log(username, password);
     e.preventDefault();
@@ -83,12 +86,28 @@ export default function SignIn() {
       .then((data) => data.json())
       .then((result) => {
         if (result) {
+          // if username and password are a match, redirect to landing page
+          setLogin(true);
+          history.push('landing');
+        } else {
+          // otherwise, notify that password is incorrect
+          alert('Invalid username or password');
+        }
+      })
+      .then((data) => data.json())
+      .then((result) => {
+        if (result) {
           setLogin(true);
           history.push('landing');
         } else {
           alert('Invalid username or password');
         }
       });
+  };
+
+  // redirects to sign-up page to allow user to create account
+  const toSignUpPage = () => {
+    history.push('signup');
   };
 
   const routeChange = () => {
@@ -162,9 +181,9 @@ export default function SignIn() {
               </LinkUI> */}
             </Grid>
             <Grid item>
-              {/* <LinkUI href="#" variant="body2"> ---> stretch feature
-                {"Don't have an account? Sign Up"}
-              </LinkUI> */}
+              <LinkUI href='#' onClick={() => toSignUpPage()} variant='body2'>
+                {"Don't have an account?"} {<strong>Sign Up</strong>}
+              </LinkUI>
             </Grid>
           </Grid>
         </form>
