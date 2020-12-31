@@ -1,14 +1,9 @@
-const { Client } = require('pg');
-
-const database = new Client({ connectionString: process.env.POSTGRES_API });
-
-database.connect();
-
+const database = require('../models/userModel');
 const dbController = {};
 
 //Selects all rows from the transactions table.
 dbController.getBankTransactions = (request, response, next) => {
-  const queryText = 'SELECT * FROM user_transactions';
+  const queryText = 'SELECT * FROM User_Transactions user_trans LEFT OUTER JOIN User_Accounts user_acc ON user_acc._id = user_trans.account_id WHERE user_acc._id = $1';
   database.query(queryText, (err, res) => {
     if (err) {
       return next(err);
@@ -20,7 +15,8 @@ dbController.getBankTransactions = (request, response, next) => {
 };
 
 dbController.getBankAccounts = (request, response, next) => {
-  const queryText = 'SELECT * FROM account_information;';
+  const values = [response.locals.result.id]
+  const query = 'SELECT * FROM User_Accounts user_acc LEFT OUTER JOIN Users u ON user_acc.user_id = u._id WHERE u._id = $1';
   database.query(queryText, (err, res) => {
     if (err) {
       return next(err);
