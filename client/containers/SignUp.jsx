@@ -61,13 +61,7 @@ export default function SignIn() {
   
   // HERE: write function to check login info - use bcrypt compare route
   const clickHandler = (e) => {
-<<<<<<< HEAD
-    // console.log(username, password);
     e.preventDefault(); 
-    // console.log('enters click handler')
-=======
-    e.preventDefault(); 
->>>>>>> main
     fetch('/bcrypt/create_pw', {
       method: 'POST',
       body: JSON.stringify({
@@ -76,15 +70,9 @@ export default function SignIn() {
       }),
       headers: {
         'Content-Type': 'application/json'
-<<<<<<< HEAD
-      }
-    }).then(data => data.json())
-      .then(result => { // might modify if we change backend to check for duplicate users
-=======
       },
     })
       .then(result => { // if success, result will have a truthy value
->>>>>>> main
         if (result) { // once account has been created, redirect to landing page
           setLogin(true);
           sessionStorage.setItem('currentUser', username) // stores created username in session storage if successful
@@ -97,10 +85,6 @@ export default function SignIn() {
   }
 
   const toSignInPage = () => {
-<<<<<<< HEAD
-    // const history = useHistory();
-=======
->>>>>>> main
     history.push('/')
   }
 
